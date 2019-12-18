@@ -1,4 +1,10 @@
 import React, {Component} from "react";
+import {Button, Col, Input, InputNumber, Row, Select, Steps, message} from "antd";
+import ResultComponent from "./ResultComponent";
+
+const {Step} = Steps;
+
+const {Option} = Select;
 
 const operators = {
 	"+": [(a, b) => b + a, 2],
@@ -20,6 +26,105 @@ const operators = {
 
 
 export default class PolishNotationComponent extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			current: 0,
+			expressionStr: ''
+		};
+
+	}
+
+	getSteps() {
+		return [
+			{
+				title: 'First',
+				content: <Row gutter={16}>
+					<Col sm={12}>
+						<div className="form-item">
+							<span className="label">Please enter a number</span>
+							<InputNumber size="large" min={1} max={100000}/>
+						</div>
+					</Col>
+					<Col sm={12}>
+						<Button type="primary" onClick={() => this.next()}>Add Number</Button>
+					</Col>
+				</Row>,
+			},
+			{
+				title: 'Second',
+				content: <Row gutter={16}>
+					<Col sm={12}>
+						<div className="form-item">
+							<span className="label">Please enter a number</span>
+							<InputNumber size="large" min={1} max={100000}/>
+						</div>
+					</Col>
+					<Col sm={12}>
+						<Button type="primary" onClick={() => this.next()}>Add Number</Button>
+					</Col>
+				</Row>,
+			},
+			{
+				title: 'third',
+				content: <Row gutter={16}>
+					<Col sm={12}>
+						<div className="form-item">
+							<span className="label">Plese select an Operand</span>
+							<InputNumber size="large" min={1} max={100000}/>
+						</div>
+					</Col>
+					<Col sm={12}>
+						<Button type="primary" onClick={() => this.next()}>Add Operand</Button>
+					</Col>
+				</Row>,
+			},
+			{
+				title: 'Last',
+				content: <Row gutter={16}>
+					<ResultComponent/>
+					<Col xs={12} md={8}>
+						<div className="form-item">
+							<span className="label">Operator</span>
+							<Select
+								showSearch
+								placeholder="Select Operation"
+								optionFilterProp="children"
+								filterOption={(input, option) =>
+									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+								}
+							>
+								<Option value="+">+</Option>
+								<Option value="-">-</Option>
+								<Option value="*">*</Option>
+								<Option value="/">/</Option>
+							</Select>
+						</div>
+					</Col>
+					<Col xs={12} md={8}>
+						<div className="form-item">
+							<span className="label">Operand</span>
+							<Input value="1"/>
+						</div>
+					</Col>
+					<Col xs={24} md={8}>
+						<Button type="primary">Add Operation</Button>
+					</Col>
+				</Row>,
+			},]
+	}
+
+	next() {
+		let {evalStr} = this.state;
+		const current = this.state.current + 1;
+		this.setState({current});
+	}
+
+	prev() {
+		const current = this.state.current - 1;
+		this.setState({current});
+	}
+
 	evalStr = (str, mul) => {
 		var stack = [];
 		str = str.trim();
@@ -46,8 +151,26 @@ export default class PolishNotationComponent extends Component {
 	};
 
 	render() {
+		const {current} = this.state;
+		const steps = this.getSteps();
+		console.log(this.evalStr('3 4 +', 'space'));
 		return (
-			<div>PolishNotationComponent</div>
+			<div className="wrapper">
+				<h1 className='result'>Expression </h1>
+				<h1 className='result'> Evaluator</h1>
+
+				<div className="steps-content">{steps[current].content}</div>
+				<div className="steps-action">
+
+					{current > 0 && (
+						<Button style={{marginLeft: 8}} onClick={() => this.prev()}>
+							Previous
+						</Button>
+					)}
+				</div>
+
+
+			</div>
 		)
 	}
 }

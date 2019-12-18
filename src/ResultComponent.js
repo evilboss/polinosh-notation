@@ -22,23 +22,29 @@ const operators = {
 
 
 export default class ResultComponent extends Component {
+	constructor(props) {
+		super();
+	}
+
 	evalStr = (str, mul) => {
-		var stack = [];
+		const stack = [];
 		str = str.trim();
-		if (str.length == 0) return 0;
+		if (str.length === 0) return 0;
 		if (mul) str = str.toLowerCase().split(" ");
-		for (var i = 0; i < str.length; i++) {
+		for (let i = 0; i < str.length; i++) {
 			if (str[i] in operators) {
-				var numArg = operators[str[i]][1];
+				const numArg = operators[str[i]][1];
+				// eslint-disable-next-line no-throw-literal
 				if (stack.length < numArg) throw "Missing operant";
-				stack.push(operators[str[i]][0].apply(null, (function () {
-					var arr = [];
-					for (var j = 0; j < numArg; j++) {
+				stack.push(operators[str[i]][0].apply(null, (() => {
+					const arr = [];
+					for (let j = 0; j < numArg; j++) {
 						arr.push(stack.pop());
 					}
 					return arr;
 				})()));
 			} else {
+				// eslint-disable-next-line no-throw-literal
 				if (!/^[0-9.]+$/.test(str[i])) throw "Unknown operator \"" + str[i] + "\"";
 				stack.push(+str[i]);
 			}
@@ -48,6 +54,7 @@ export default class ResultComponent extends Component {
 	};
 
 	render() {
+		console.log(this.evalStr('3 4 +', 'space'));
 		return (
 			<div>
 				<div className="spacer" style={{height: "50px"}}></div>
