@@ -3,3 +3,84 @@
 .App {
   text-align: center;
 }
+
+.App .wrapper{
+  max-width: 800px;
+  margin: 100px auto 0;
+  padding: 20px;
+}
+.wrapper h1{
+  margin-bottom: 30px;
+}
+.form-item{
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  height: 68px;
+}
+.form-item .label{
+  display: block;
+  text-align: left;
+  margin: 5px 0 0 10px;
+  color: #bfbfbf;
+}
+.form-item .ant-input-number,
+.form-item .ant-input{
+  width: 100%;
+  border: 0;
+  color: #000;
+  box-shadow: none;
+}
+.ant-btn-primary{
+  background: #79cea1;
+  width: 100%;
+  height: auto;
+  font-size: 18px;
+  padding: 0;
+  height: 68px;
+  border: 1px solid #79cea1;
+  box-shadow: none;
+  text-shadow: none;
+}
+.ant-btn-primary:focus,
+.ant-btn-primary:active,
+.ant-btn-primary:hover{
+  background: #79cea1;
+  border: 1px solid #79cea1;
+}
+.form-item .ant-select{
+  width: 100%;
+  font-size: 16px;
+  border: 0;
+  margin-top: 5px;
+}
+.form-item .ant-select .ant-select-selection{
+  border: 0;
+  box-shadow: none;
+}
+
+.tiles{
+  max-width: 242px;
+  margin: 20px auto;
+}
+.tiles span {
+  display: block;
+  background: #ecf5f7;
+  font-size: 28px;
+  text-align: center;
+  padding: 22px 0;
+  border-radius: 5px;
+}
+.equals{
+  font-size: 68px;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+.result{
+  color: #79cea1;
+  font-size: 68px;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 0;
+}

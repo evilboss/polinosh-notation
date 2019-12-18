@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import {Button, InputNumber, Select, Row, Col} from 'antd';
+import './App.css';
 
 const operators = {
 	"+": [(a, b) => b + a, 2],
@@ -47,7 +49,25 @@ export default class ResultComponent extends Component {
 
 	render() {
 		return (
-			<div>RESULT PAGE</div>
+			<div>
+				<div className="spacer" style={{height: "50px"}}></div>
+				<div className="tiles">
+					<Row gutter={16}>
+						<Col span={8}>
+							<span>3</span>
+						</Col>
+						<Col span={8}>
+							<span>4</span>
+						</Col>
+						<Col span={8}>
+							<span>+</span>
+						</Col>
+					</Row>
+				</div>
+				<p className="equals">=</p>
+				<p className="result">7</p>
+				<div className="spacer" style={{height: "50px"}}></div>
+			</div>
 		)
 	}
 }
