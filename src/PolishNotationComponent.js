@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Col, Input, InputNumber, Row, Select, Steps, message} from "antd";
+import {Form, Button, Col, Input, InputNumber, Row, Select, Steps, message} from "antd";
 import ResultComponent from "./ResultComponent";
 
 const {Step} = Steps;
@@ -25,22 +25,30 @@ const operators = {
 };
 
 
-export default class PolishNotationComponent extends Component {
+class PolishNotationComponent extends Component {
+
 	constructor(props) {
 		super(props);
 		this.state = {
 			current: 0,
 			expressionStr: ''
 		};
-
 	}
 
 	getSteps() {
-		return [
+		const {getFieldDecorator} = this.props.form;
+
+		const steps = [
 			{
 				title: 'First',
 				content: <Row gutter={16}>
 					<Col sm={12}>
+						<Form.Item label="Note">
+							{getFieldDecorator('note', {
+								rules: [{required: true, message: 'Please input your note!'}],
+							})(<Input/>)}
+						</Form.Item>
+
 						<div className="form-item">
 							<span className="label">Please enter a number</span>
 							<InputNumber size="large" min={1} max={100000}/>
@@ -55,6 +63,8 @@ export default class PolishNotationComponent extends Component {
 				title: 'Second',
 				content: <Row gutter={16}>
 					<Col sm={12}>
+
+
 						<div className="form-item">
 							<span className="label">Please enter a number</span>
 							<InputNumber size="large" min={1} max={100000}/>
@@ -122,13 +132,23 @@ export default class PolishNotationComponent extends Component {
 						<Button type="primary">Add Operation</Button>
 					</Col>
 				</Row>,
-			},]
+			},];
+		return steps;
 	}
 
 	next() {
-		let {evalStr} = this.state;
-		const current = this.state.current + 1;
-		this.setState({current});
+		const {form} = this.props;
+
+		let {evalStr, current} = this.state;
+		if (current === 0) {
+			form.validateFieldsAndScroll(['note'], (err, values) => {
+				console.log(values);
+			});
+
+		}
+		//const current = this.state.current + 1;
+
+		//	this.setState({current});
 	}
 
 	prev() {
@@ -162,6 +182,7 @@ export default class PolishNotationComponent extends Component {
 	};
 
 	render() {
+
 		const {current} = this.state;
 		const steps = this.getSteps();
 		console.log(this.evalStr('3 4 +', 'space'));
@@ -185,3 +206,5 @@ export default class PolishNotationComponent extends Component {
 		)
 	}
 }
+
+export default Form.create()(PolishNotationComponent);
