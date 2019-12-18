@@ -70,8 +70,19 @@ export default class PolishNotationComponent extends Component {
 				content: <Row gutter={16}>
 					<Col sm={12}>
 						<div className="form-item">
-							<span className="label">Plese select an Operand</span>
-							<InputNumber size="large" min={1} max={100000}/>
+							<Select
+								showSearch
+								placeholder="Select Operation"
+								optionFilterProp="children"
+								filterOption={(input, option) =>
+									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+								}
+							>
+								<Option value="+">+</Option>
+								<Option value="-">-</Option>
+								<Option value="*">*</Option>
+								<Option value="/">/</Option>
+							</Select>
 						</div>
 					</Col>
 					<Col sm={12}>
