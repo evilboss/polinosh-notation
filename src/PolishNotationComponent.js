@@ -31,28 +31,33 @@ class PolishNotationComponent extends Component {
 		super(props);
 		this.state = {
 			current: 0,
-			expressionStr: ''
+			expressionStr: '',
+			evaluate: false,
 		};
 	}
 
 	getSteps() {
 		const {getFieldDecorator} = this.props.form;
-
+		const {expressionStr, evaluate} = this.state;
+		console.log(expressionStr, this.evalStr(expressionStr, 'space'));
 		const steps = [
 			{
-				title: 'First',
+				title: 'Operand1',
 				content: <Row gutter={16}>
 					<Col sm={12}>
-						<Form.Item label="Note">
-							{getFieldDecorator('note', {
-								rules: [{required: true, message: 'Please input your note!'}],
-							})(<Input/>)}
+						<Form.Item>
+
+							{
+								getFieldDecorator('operand', {
+									rules: [{required: true, message: 'Please input your Number'}],
+								})(
+									<InputNumber placeholder="Please enter a number" size="large"
+															 style={{height: '70px', width: '300px', fontSize: '20px', textAlign: 'center'}} min={1}
+															 max={100000}/>
+								)
+							}
 						</Form.Item>
 
-						<div className="form-item">
-							<span className="label">Please enter a number</span>
-							<InputNumber size="large" min={1} max={100000}/>
-						</div>
 					</Col>
 					<Col sm={12}>
 						<Button type="primary" onClick={() => this.next()}>Add Number</Button>
@@ -60,15 +65,23 @@ class PolishNotationComponent extends Component {
 				</Row>,
 			},
 			{
-				title: 'Second',
+				title: 'Operand2',
 				content: <Row gutter={16}>
 					<Col sm={12}>
 
 
-						<div className="form-item">
-							<span className="label">Please enter a number</span>
-							<InputNumber size="large" min={1} max={100000}/>
-						</div>
+						<Form.Item>
+
+							{
+								getFieldDecorator('operand', {
+									rules: [{required: true, message: 'Please input your Number'}],
+								})(
+									<InputNumber placeholder="Please enter a number" size="large"
+															 style={{height: '70px', width: '300px', fontSize: '20px', textAlign: 'center'}} min={1}
+															 max={100000}/>
+								)
+							}
+						</Form.Item>
 					</Col>
 					<Col sm={12}>
 						<Button type="primary" onClick={() => this.next()}>Add Number</Button>
@@ -76,24 +89,32 @@ class PolishNotationComponent extends Component {
 				</Row>,
 			},
 			{
-				title: 'third',
+				title: 'Operator',
 				content: <Row gutter={16}>
 					<Col sm={12}>
-						<div className="form-item">
-							<Select
-								showSearch
-								placeholder="Select Operation"
-								optionFilterProp="children"
-								filterOption={(input, option) =>
-									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-								}
-							>
-								<Option value="+">+</Option>
-								<Option value="-">-</Option>
-								<Option value="*">*</Option>
-								<Option value="/">/</Option>
-							</Select>
-						</div>
+						<Form.Item>
+							{getFieldDecorator('operator', {
+								rules: [{required: true}],
+							})(
+								<Select
+									size='large'
+									showSearch
+									placeholder="Select Operation"
+									style={{fontSize: '20px'}}
+									optionFilterProp="children"
+									filterOption={(input, option) =>
+										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
+								>
+									<Option value="+">+</Option>
+									<Option value="-">-</Option>
+									<Option value="*">*</Option>
+									<Option value="/">/</Option>
+								</Select>
+							)}
+						</Form.Item>
+
+
 					</Col>
 					<Col sm={12}>
 						<Button type="primary" onClick={() => this.next()}>Add Operand</Button>
@@ -101,9 +122,9 @@ class PolishNotationComponent extends Component {
 				</Row>,
 			},
 			{
-				title: 'Last',
+				title: 'Result Page',
 				content: <Row gutter={16}>
-					<ResultComponent/>
+					<ResultComponent expression={expressionStr} result={evaluate ? this.evalStr(expressionStr, 'space') : ''}/>
 					<Col xs={12} md={8}>
 						<div className="form-item">
 							<span className="label">Operator</span>
@@ -138,18 +159,38 @@ class PolishNotationComponent extends Component {
 
 	next() {
 		const {form} = this.props;
-
-		let {evalStr, current} = this.state;
-		if (current === 0) {
-			form.validateFieldsAndScroll(['note'], (err, values) => {
-				console.log(values);
+		let goNext = false;
+		let {evalStr, current, evaluate} = this.state;
+		console.log(evalStr);
+		if (current < 2) {
+			form.validateFieldsAndScroll(['operand'], (err, values) => {
+				if (!err) {
+					console.log(values);
+					evalStr = (evalStr) ? `${evalStr}  ${Object.values(values)}` : Object.values(values);
+					goNext = true;
+				}
 			});
 
+		} else if (current === 2) {
+			form.validateFieldsAndScroll(['operator'], (err, values) => {
+				if (!err) {
+					evalStr = (evalStr) ? `${evalStr}  ${Object.values(values)}` : Object.values(values);
+					evaluate = true;
+					goNext = true;
+				}
+			});
 		}
-		//const current = this.state.current + 1;
+		if (goNext) {
+			console.log(evalStr);
 
-		//	this.setState({current});
+			const current = this.state.current + 1;
+
+			this.setState({current, evalStr, evaluate});
+		}
 	}
+
+	//
+	//
 
 	prev() {
 		const current = this.state.current - 1;

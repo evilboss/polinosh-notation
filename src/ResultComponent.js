@@ -54,15 +54,21 @@ export default class ResultComponent extends Component {
 	};
 
 	render() {
+		const {expression, result} = this.props;
+		const expressions = (expression) ? expression.split(' ') : [];
 		console.log(this.evalStr('3 4 +', 'space'));
 		return (
 			<div>
 				<div className="spacer" style={{height: "50px"}}></div>
 				<div className="tiles">
 					<Row gutter={16}>
-						<Col span={8}>
-							<span>3</span>
-						</Col>
+
+						{expressions.map((item, key) =>
+							<Col span={8} key={key}>
+								<span>{item}</span>
+							</Col>
+						)}
+
 						<Col span={8}>
 							<span>4</span>
 						</Col>
@@ -72,7 +78,7 @@ export default class ResultComponent extends Component {
 					</Row>
 				</div>
 				<p className="equals">=</p>
-				<p className="result">7</p>
+				<p className="result">{result}</p>
 				<div className="spacer" style={{height: "50px"}}></div>
 			</div>
 		)
