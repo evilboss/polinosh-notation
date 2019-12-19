@@ -18,7 +18,7 @@ export default class ResultComponent extends Component {
 
 						{expressions.map((item, key) =>
 							<Col span={8} key={key}>
-								<span>{item}</span>
+								<span  style={{margin: '1px'}}>{item}</span>
 							</Col>
 						)}
 
