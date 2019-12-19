@@ -31,7 +31,7 @@ export default class ResultComponent extends Component {
 				</div> : ''}
 
 
-				<div className="spacer" style={{height: "50px"}}></div>
+				<div className="spacer" style={{height: "50px"}}/>
 			</div>
 		)
 	}
