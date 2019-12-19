@@ -24,7 +24,7 @@ export default class ResultComponent extends Component {
 
 					</Row>
 				</div>
-				{result ? <div
+				{result ? <div>
 					<p className="equals">=</p>
 					<p className="result">{result}</p>
 				</div> : ''}
