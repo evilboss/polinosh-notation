@@ -198,7 +198,6 @@ class PolishNotationComponent extends Component {
 		} else if (current === 2) {
 			form.validateFieldsAndScroll(['operator'], (err, values) => {
 				if (!err) {
-					console.log(Object.values(values));
 					setValues(Object.values(values));
 					evaluate = true;
 					goNext = true;
@@ -252,13 +251,11 @@ class PolishNotationComponent extends Component {
 		const {current, expressionStr} = this.state;
 		let result = '';
 
-		console.log(expressionStr.toString().replace(/,/gi, ' '), expressionStr.length);
 		if (expressionStr.length >= 3) {
 			result = this.evalStr(expressionStr.toString().replace(/,/gi, ' '), 'space');
 		}
-		console.log(result);
 		const steps = this.getSteps();
-		console.log(this.evalStr('3 4 +', 'space'));
+
 		return (
 			<div className="wrapper">
 				<h1 className='result'>Expression<br/>Evaluator</h1>
