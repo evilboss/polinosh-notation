@@ -36,6 +36,20 @@ class PolishNotationComponent extends Component {
 		};
 	}
 
+	additionalOperator() {
+		const {form} = this.props;
+		const {expressionStr} = this.state;
+		form.validateFieldsAndScroll(['additionalOperator', 'additionalOperand'], (err, values) => {
+			if (!err) {
+				console.log(values);
+				expressionStr.push(values.additionalOperand);
+				expressionStr.push(values.additionalOperator);
+
+			}
+		});
+
+	}
+
 	getSteps() {
 		const {getFieldDecorator} = this.props.form;
 		const {expressionStr, evaluate} = this.state;
@@ -92,7 +106,7 @@ class PolishNotationComponent extends Component {
 					<Col sm={12}>
 						<Form.Item label="Select Operation">
 							{getFieldDecorator('operator', {
-								rules: [{required: true}],
+								rules: [{required: true, message: 'operator is required'}],
 							})(
 								<Select
 									size='large'
@@ -120,8 +134,8 @@ class PolishNotationComponent extends Component {
 				content: <Row gutter={16}>
 					<Col xs={12} md={8}>
 						<Form.Item label="Select Operation">
-							{getFieldDecorator('operator', {
-								rules: [{required: true}],
+							{getFieldDecorator('additionalOperator', {
+								rules: [{required: true, message: ''}],
 							})(
 								<Select
 									size='large'
@@ -141,8 +155,8 @@ class PolishNotationComponent extends Component {
 					</Col>
 					<Col xs={12} md={8}>
 						<Form.Item label="Operand">
-							{getFieldDecorator('operand', {
-								rules: [{required: true}],
+							{getFieldDecorator('additionalOperand', {
+								rules: [{required: true, message: 'Operand must have a value'}],
 
 							})(
 								<Input value="1"/>
@@ -150,7 +164,7 @@ class PolishNotationComponent extends Component {
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={8}>
-						<Button type="primary">Add Operation</Button>
+						<Button type="primary" onClick={() => this.additionalOperator()}>Add Operation</Button>
 					</Col>
 				</Row>,
 			},];
@@ -232,6 +246,7 @@ class PolishNotationComponent extends Component {
 		return stack[0];
 	};
 
+
 	render() {
 
 		const {current, expressionStr} = this.state;
@@ -241,7 +256,7 @@ class PolishNotationComponent extends Component {
 		if (expressionStr.length >= 3) {
 			result = this.evalStr(expressionStr.toString().replace(/,/gi, ' '), 'space');
 		}
-
+		console.log(result);
 		const steps = this.getSteps();
 		console.log(this.evalStr('3 4 +', 'space'));
 		return (
