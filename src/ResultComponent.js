@@ -12,13 +12,14 @@ export default class ResultComponent extends Component {
 		const {expression: expressions, result} = this.props;
 		return (
 			<div>
-				<div className="spacer" style={{height: "50px"}}></div>
+				<div className="spacer" style={{height: "50px"}}/>
 				<div className="tiles">
 					<Row gutter={16}>
 
 						{expressions.map((item, key) =>
+
 							<Col span={8} key={key}>
-								<span  style={{margin: '1px'}}>{item}</span>
+								<span style={{margin: '1px'}}>{item}</span>
 							</Col>
 						)}
 

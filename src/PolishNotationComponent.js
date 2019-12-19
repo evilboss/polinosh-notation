@@ -159,8 +159,8 @@ class PolishNotationComponent extends Component {
 								rules: [{required: true, message: 'Operand must have a value'}],
 
 							})(
-								<Input value="1"/>
-							)}
+								<InputNumber size="large" min={1}
+														 max={100000}/>							)}
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={8}>
