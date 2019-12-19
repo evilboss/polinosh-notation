@@ -45,14 +45,14 @@ class PolishNotationComponent extends Component {
 				title: 'Operand1',
 				content: <Row gutter={16}>
 					<Col sm={12}>
-						<Form.Item>
+						<Form.Item label="Please enter a Number">
 
 							{
 								getFieldDecorator('operand', {
-									rules: [{required: true, message: 'Please input your Number'}],
+									rules: [{required: true, message: 'Please enter a Number'}],
 								})(
-									<InputNumber placeholder="Please enter a number" size="large"
-															 style={{height: '70px', width: '300px', fontSize: '20px', textAlign: 'center'}} min={1}
+									
+									<InputNumber size="large" min={1}
 															 max={100000}/>
 								)
 							}
@@ -70,14 +70,13 @@ class PolishNotationComponent extends Component {
 					<Col sm={12}>
 
 
-						<Form.Item>
+						<Form.Item label="Please enter a Number">
 
 							{
 								getFieldDecorator('operand', {
-									rules: [{required: true, message: 'Please input your Number'}],
+									rules: [{required: true, message: 'Please enter a Number'}],
 								})(
-									<InputNumber placeholder="Please enter a number" size="large"
-															 style={{height: '70px', width: '300px', fontSize: '20px', textAlign: 'center'}} min={1}
+									<InputNumber size="large" min={1}
 															 max={100000}/>
 								)
 							}
@@ -85,6 +84,7 @@ class PolishNotationComponent extends Component {
 					</Col>
 					<Col sm={12}>
 						<Button type="primary" onClick={() => this.next()}>Add Number</Button>
+						{/* Change text to  Add another number sa 2nd number */}
 					</Col>
 				</Row>,
 			},
@@ -92,29 +92,25 @@ class PolishNotationComponent extends Component {
 				title: 'Operator',
 				content: <Row gutter={16}>
 					<Col sm={12}>
-						<Form.Item>
+						<Form.Item label="Select Operation">
 							{getFieldDecorator('operator', {
 								rules: [{required: true}],
 							})(
 								<Select
 									size='large'
 									showSearch
-									placeholder="Select Operation"
-									style={{fontSize: '20px'}}
 									optionFilterProp="children"
 									filterOption={(input, option) =>
 										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 									}
 								>
-									<Option value="+">+</Option>
-									<Option value="-">-</Option>
-									<Option value="*">*</Option>
-									<Option value="/">/</Option>
+									<Option value="+">+ (Add)</Option>
+									<Option value="-">- (Subtract)</Option>
+									<Option value="*">* (Multiply)</Option>
+									<Option value="/">/ (Divide)</Option>
 								</Select>
 							)}
 						</Form.Item>
-
-
 					</Col>
 					<Col sm={12}>
 						<Button type="primary" onClick={() => this.next()}>Add Operand</Button>
@@ -126,28 +122,34 @@ class PolishNotationComponent extends Component {
 				content: <Row gutter={16}>
 					<ResultComponent expression={expressionStr} result={evaluate ? this.evalStr(expressionStr, 'space') : ''}/>
 					<Col xs={12} md={8}>
-						<div className="form-item">
-							<span className="label">Operator</span>
-							<Select
-								showSearch
-								placeholder="Select Operation"
-								optionFilterProp="children"
-								filterOption={(input, option) =>
-									option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-								}
-							>
-								<Option value="+">+</Option>
-								<Option value="-">-</Option>
-								<Option value="*">*</Option>
-								<Option value="/">/</Option>
-							</Select>
-						</div>
+						<Form.Item label="Select Operation">
+							{getFieldDecorator('operator', {
+								rules: [{required: true}],
+							})(
+								<Select
+									size='large'
+									showSearch
+									optionFilterProp="children"
+									filterOption={(input, option) =>
+										option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
+								>
+									<Option value="+">+ (Add)</Option>
+									<Option value="-">- (Subtract)</Option>
+									<Option value="*">* (Multiply)</Option>
+									<Option value="/">/ (Divide)</Option>
+								</Select>
+							)}
+						</Form.Item>
 					</Col>
 					<Col xs={12} md={8}>
-						<div className="form-item">
-							<span className="label">Operand</span>
-							<Input value="1"/>
-						</div>
+						<Form.Item label="Operand">
+							{getFieldDecorator('operand', {
+								rules: [{required: true}],
+							})(
+								<Input value="1"/>
+							)}
+						</Form.Item>
 					</Col>
 					<Col xs={24} md={8}>
 						<Button type="primary">Add Operation</Button>
@@ -229,8 +231,7 @@ class PolishNotationComponent extends Component {
 		console.log(this.evalStr('3 4 +', 'space'));
 		return (
 			<div className="wrapper">
-				<h1 className='result'>Expression </h1>
-				<h1 className='result'> Evaluator</h1>
+				<h1 className='result'>Expression<br />Evaluator</h1>
 
 				<div className="steps-content">{steps[current].content}</div>
 				<div className="steps-action">
