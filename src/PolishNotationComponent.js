@@ -96,7 +96,6 @@ class PolishNotationComponent extends Component {
 					</Col>
 					<Col sm={12}>
 						<Button type="primary" onClick={() => this.next()}>Add Another Number</Button>
-						{/* Change text to  Add another number sa 2nd number */}
 					</Col>
 				</Row>,
 			},
