@@ -31,7 +31,7 @@ class PolishNotationComponent extends Component {
 		super(props);
 		this.state = {
 			current: 0,
-			expressionStr: '',
+			expressionStr: [],
 			evaluate: false,
 		};
 	}
@@ -39,7 +39,6 @@ class PolishNotationComponent extends Component {
 	getSteps() {
 		const {getFieldDecorator} = this.props.form;
 		const {expressionStr, evaluate} = this.state;
-		console.log(expressionStr, this.evalStr(expressionStr, 'space'));
 		const steps = [
 			{
 				title: 'Operand1',
@@ -48,10 +47,9 @@ class PolishNotationComponent extends Component {
 						<Form.Item label="Please enter a Number">
 
 							{
-								getFieldDecorator('operand', {
+								getFieldDecorator('operand1', {
 									rules: [{required: true, message: 'Please enter a Number'}],
 								})(
-									
 									<InputNumber size="large" min={1}
 															 max={100000}/>
 								)
@@ -73,7 +71,7 @@ class PolishNotationComponent extends Component {
 						<Form.Item label="Please enter a Number">
 
 							{
-								getFieldDecorator('operand', {
+								getFieldDecorator('operand2', {
 									rules: [{required: true, message: 'Please enter a Number'}],
 								})(
 									<InputNumber size="large" min={1}
@@ -83,7 +81,7 @@ class PolishNotationComponent extends Component {
 						</Form.Item>
 					</Col>
 					<Col sm={12}>
-						<Button type="primary" onClick={() => this.next()}>Add Number</Button>
+						<Button type="primary" onClick={() => this.next()}>Add Another Number</Button>
 						{/* Change text to  Add another number sa 2nd number */}
 					</Col>
 				</Row>,
@@ -120,7 +118,6 @@ class PolishNotationComponent extends Component {
 			{
 				title: 'Result Page',
 				content: <Row gutter={16}>
-					<ResultComponent expression={expressionStr} result={evaluate ? this.evalStr(expressionStr, 'space') : ''}/>
 					<Col xs={12} md={8}>
 						<Form.Item label="Select Operation">
 							{getFieldDecorator('operator', {
@@ -146,6 +143,7 @@ class PolishNotationComponent extends Component {
 						<Form.Item label="Operand">
 							{getFieldDecorator('operand', {
 								rules: [{required: true}],
+
 							})(
 								<Input value="1"/>
 							)}
@@ -161,14 +159,24 @@ class PolishNotationComponent extends Component {
 
 	next() {
 		const {form} = this.props;
+		const {expressionStr} = this.state;
 		let goNext = false;
-		let {evalStr, current, evaluate} = this.state;
-		console.log(evalStr);
-		if (current < 2) {
-			form.validateFieldsAndScroll(['operand'], (err, values) => {
+		const setValues = (value) => {
+			expressionStr.push(value)
+		};
+		let {current, evaluate} = this.state;
+		if (current === 0) {
+			form.validateFieldsAndScroll(['operand1'], (err, values) => {
 				if (!err) {
-					console.log(values);
-					evalStr = (evalStr) ? `${evalStr}  ${Object.values(values)}` : Object.values(values);
+					setValues(Object.values(values));
+					goNext = true;
+				}
+			});
+
+		} else if (current === 1) {
+			form.validateFieldsAndScroll(['operand2'], (err, values) => {
+				if (!err) {
+					setValues(Object.values(values));
 					goNext = true;
 				}
 			});
@@ -176,18 +184,18 @@ class PolishNotationComponent extends Component {
 		} else if (current === 2) {
 			form.validateFieldsAndScroll(['operator'], (err, values) => {
 				if (!err) {
-					evalStr = (evalStr) ? `${evalStr}  ${Object.values(values)}` : Object.values(values);
+					console.log(Object.values(values));
+					setValues(Object.values(values));
 					evaluate = true;
 					goNext = true;
 				}
 			});
 		}
 		if (goNext) {
-			console.log(evalStr);
 
 			const current = this.state.current + 1;
 
-			this.setState({current, evalStr, evaluate});
+			this.setState({current, evaluate});
 		}
 	}
 
@@ -226,12 +234,20 @@ class PolishNotationComponent extends Component {
 
 	render() {
 
-		const {current} = this.state;
+		const {current, expressionStr} = this.state;
+		let result = '';
+
+		console.log(expressionStr.toString().replace(/,/gi, ' '), expressionStr.length);
+		if (expressionStr.length >= 3) {
+			result = this.evalStr(expressionStr.toString().replace(/,/gi, ' '), 'space');
+		}
+
 		const steps = this.getSteps();
 		console.log(this.evalStr('3 4 +', 'space'));
 		return (
 			<div className="wrapper">
-				<h1 className='result'>Expression<br />Evaluator</h1>
+				<h1 className='result'>Expression<br/>Evaluator</h1>
+				<ResultComponent expression={expressionStr} result={result}/>
 
 				<div className="steps-content">{steps[current].content}</div>
 				<div className="steps-action">
